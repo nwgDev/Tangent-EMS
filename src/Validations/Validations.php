@@ -1,7 +1,7 @@
 <?php
 
 
-namespace TANGENT\App;
+namespace TANGENT\Validations;
 
 
 use TANGENT\Config\DBManager;
