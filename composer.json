@@ -1,0 +1,30 @@
+{
+    "name": "tangent/employee",
+    "description": "build out the frontend and backend components of an employee application",
+    "type": "project",
+    "authors": [
+        {
+            "name": "winnie Nkwinika",
+            "email": "winnienkwinika@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-mysqli": "^8.0",
+      "ext-ctype": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "mockery/mockery": "^1.6"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "TANGENT\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TANGENT\\Tests\\": "tests/"
+        }
+    }
+}
