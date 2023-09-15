@@ -10,3 +10,4 @@ define('DB_HOST','localhost');
 define('DB_NAME','employee_db');
 define('EMPLOYEE_ID', $letters.$numbers);
 define('ADMIN', 'WN1234');
+define('NOW',  date("Y-m-d H:i:s"));
