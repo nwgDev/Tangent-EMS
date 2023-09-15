@@ -4,6 +4,7 @@
 namespace TANGENT\Validations;
 
 
+use DateTime;
 use TANGENT\Config\DBManager;
 
 class Validations
@@ -12,13 +13,15 @@ class Validations
     private $table;
     private $errors = [];
 
-    public function __construct($employee, $table){
+    public function __construct($employee, $table)
+    {
 
         $this->obj_employee = $employee;
         $this->table = $table;
     }
 
-    public function validate() {
+    public function validate()
+    {
         $this->validateFirstName();
         $this->validateLastName();
         $this->validateEmailAddress();
@@ -29,9 +32,11 @@ class Validations
         return empty($this->errors);
     }
 
-    private function validateFirstName() {
+    private function validateFirstName()
+    {
         if (empty($this->obj_employee->getFirstName())) {
             $this->errors[] = "First name is required.";
+
         }else{
             if (!is_string($this->obj_employee->getFirstName())) {
                 $this->errors[] = "First name is not a string.";
@@ -39,9 +44,11 @@ class Validations
         }
     }
 
-    private function validateLastName() {
+    private function validateLastName()
+    {
         if (empty($this->obj_employee->getLastName())) {
             $this->errors[] = "Last name is required.";
+
         }else{
             if (!is_string($this->obj_employee->getLastName())) {
                 $this->errors[] = "Last name is not a string.";
@@ -49,7 +56,8 @@ class Validations
         }
     }
 
-    private function validateEmailAddress() {
+    private function validateEmailAddress()
+    {
         if (!empty($this->obj_employee->getEmail())){
             if (!filter_var($this->obj_employee->getEmail(), FILTER_VALIDATE_EMAIL)) {
                 $this->errors[] = "Invalid email address.";
@@ -64,31 +72,53 @@ class Validations
         }
     }
 
-    private function validatePostalCode() {
+    private function validateDateOfBirth()
+    {
+        var_dump($this->obj_employee->getDateOfBirth());
+        if (!empty($this->obj_employee->getDateOfBirth())) {
+            $birthDate = new DateTime($this->obj_employee->getDateOfBirth());
+            $currentDate = new DateTime();
+
+            $age = $currentDate->diff($birthDate);
+
+            if ($age->y < 18) {
+                $this->errors[] = "Employee should be 18 years or older.";
+            }
+        }else {
+            $this->errors[] = "Date of birth is required.";
+        }
+    }
+
+    private function validatePostalCode()
+    {
         if (empty($this->obj_employee->getPostalCode())) {
             $this->errors[] = "Postal code is required.";
         }
     }
 
-    private function validateContactNumber() {
+    private function validateContactNumber()
+    {
         if (empty($this->obj_employee->getContactNumber())) {
             $this->errors[] = "Contact number is required.";
         }
     }
 
-    private function validateCity() {
+    private function validateCity()
+    {
         if (empty($this->obj_employee->getCity())) {
             $this->errors[] = "City is required.";
         }
     }
 
-    private function validateCountry() {
+    private function validateCountry()
+    {
         if (empty($this->obj_employee->getCountry())) {
             $this->errors[] = "Country is required.";
         }
     }
 
-    public function getErrors() {
+    public function getErrors()
+    {
         return $this->errors;
     }
 }
