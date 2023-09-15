@@ -27,8 +27,8 @@ class EmployeeManager
                 'city' => $employee->getCity(),
                 'postal_code' => $employee->getPostalCode(),
                 'country' => $employee->getCountry(),
-                'created_by' => ADMIN,
-                'created_at' => date("Y-m-d H:i:s"),
+                'created_by' => $employee->getCreatedBy(),
+                'created_at' => $employee->getCreatedAt(),
             ];
 
             DBManager::getInstance()->create($table_name,  $arr_employee);
