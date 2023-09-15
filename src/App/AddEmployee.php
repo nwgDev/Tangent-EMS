@@ -21,10 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST["city"],
         $_POST["postal_code"],
         $_POST["country"],
-        $_POST["created_by"],
-        $_POST["created_at"]
+        ADMIN,
+        date("Y-m-d H:i:s")
     );
 
     $results = EmployeeManager::AddEmployee('employees', $employee);
+    var_dump($results);
 }
 
