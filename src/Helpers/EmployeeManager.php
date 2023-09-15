@@ -3,15 +3,15 @@
 
 namespace TANGENT\Helpers;
 
-use TANGENT\Validations\Validations;
+use TANGENT\Validations\AddEmployeeValidations;
 use TANGENT\Config\DBManager;
 
 class EmployeeManager
 {
     public static function AddEmployee($table_name, $employee)
     {
-        $validation = new Validations($employee, $table_name);
-        $no_errors = $validation->validate();
+        $validation = new AddEmployeeValidations($employee, $table_name);
+        $no_errors = $validation->validateEmployee();
         $errors = $validation->getErrors();
 
         if ($no_errors) {
