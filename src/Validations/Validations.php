@@ -15,7 +15,6 @@ class Validations
 
     public function __construct($employee, $table)
     {
-
         $this->obj_employee = $employee;
         $this->table = $table;
     }
@@ -25,6 +24,7 @@ class Validations
         $this->validateFirstName();
         $this->validateLastName();
         $this->validateEmailAddress();
+        $this->validateDateOfBirth();
         $this->validateContactNumber();
         $this->validatePostalCode();
         $this->validateCity();
@@ -74,15 +74,21 @@ class Validations
 
     private function validateDateOfBirth()
     {
-        var_dump($this->obj_employee->getDateOfBirth());
         if (!empty($this->obj_employee->getDateOfBirth())) {
             $birthDate = new DateTime($this->obj_employee->getDateOfBirth());
             $currentDate = new DateTime();
+            $currentYear = date("Y");
+            $birthYear = date("Y", strtotime($birthDate->format('Y-m-d H:i:s')));
 
-            $age = $currentDate->diff($birthDate);
+            if ($birthYear >= $currentYear) {
+                $this->errors[] = "Date of birth year must be less than the current year.";
 
-            if ($age->y < 18) {
-                $this->errors[] = "Employee should be 18 years or older.";
+            }else{
+                $age = $currentDate->diff($birthDate);
+
+                if ($age->y < 18) {
+                    $this->errors[] = "Employee should be 18 years or older.";
+                }
             }
         }else {
             $this->errors[] = "Date of birth is required.";
