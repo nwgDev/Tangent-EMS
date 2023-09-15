@@ -7,7 +7,7 @@ namespace TANGENT\Validations;
 use DateTime;
 use TANGENT\Config\DBManager;
 
-class Validations
+class AddEmployeeValidations
 {
     private $obj_employee;
     private $table;
@@ -19,7 +19,7 @@ class Validations
         $this->table = $table;
     }
 
-    public function validate()
+    public function validateEmployee()
     {
         $this->validateFirstName();
         $this->validateLastName();
