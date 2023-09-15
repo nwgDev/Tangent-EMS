@@ -3,9 +3,11 @@ include_once '../Helpers/EmployeeManager.php';
 include_once '../Config/config.php';
 include_once '../Config/DBManager.php';
 include_once 'Employee.php';
-include_once '../Validations/Validations.php';
+include_once '../Validations/AddEmployeeValidations.php';
 
 use TANGENT\App\Employee;
+use TANGENT\App\EmployeeSkills;
+use TANGENT\Config\DBManager;
 use TANGENT\Helpers\EmployeeManager;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,10 +24,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST["postal_code"],
         $_POST["country"],
         ADMIN,
-        date("Y-m-d H:i:s")
+        NOW
     );
 
+    $skills = $_POST["skills"];
+    print_r(json_encode($skills));
+    echo "<br>";
+    echo "Skills:<br>";
+    foreach ($skills as $skill) {
+        echo "- " . $skill . "<br>";
+    }
+
     $results = EmployeeManager::AddEmployee('employees', $employee);
+
+    if($results) {
+
+        if(DBManager::getInstance()->exists($this->table, ['id'  => $this->obj_employee->getID(),])) {
+            $employee_skills = new EmployeeSkills (
+                $this->obj_employee->getID(),
+                json_encode($skills),
+                ADMIN,
+                NOW
+            );
+        }
+    }
     var_dump($results);
 }
 
