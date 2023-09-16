@@ -3,6 +3,7 @@
 
 namespace TANGENT\Helpers;
 
+use TANGENT\Validations\AddEmployeeSkillsValidations;
 use TANGENT\Validations\AddEmployeeValidations;
 use TANGENT\Config\DBManager;
 
@@ -15,7 +16,7 @@ class EmployeeManager
         $errors = $validation->getErrors();
 
         if ($no_errors) {
-            $arr_employee = [
+            $arrEmployee = [
                 'id' => $employee->getID(),
                 'seniority_rating_id' => $employee->getSeniorityRating(),
                 'first_name' => $employee->getFirstName(),
@@ -31,17 +32,54 @@ class EmployeeManager
                 'created_at' => $employee->getCreatedAt(),
             ];
 
-            DBManager::getInstance()->create($table_name,  $arr_employee);
+            DBManager::getInstance()->create($table_name,  $arrEmployee);
 
             return true;
         }
         return $errors;
     }
 
+    public static function AddEmployeeSkills($table_name, $employeeSkills)
+    {
+        $validation = new AddEmployeeSkillsValidations($employeeSkills);
+        $no_errors = $validation->validateEmployeeSkills();
+        $errors = $validation->getErrors();
+
+        if ($no_errors) {
+            $arrEmployeeSkills = [
+                'employee_id' => $employeeSkills->getEmployee(),
+                'skills' => $employeeSkills->getSkills(),
+                'created_by' => $employeeSkills->getCreatedBy(),
+                'created_at' => $employeeSkills->getCreatedAt(),
+            ];
+
+            DBManager::getInstance()->create($table_name,  $arrEmployeeSkills);
+
+            return true;
+        }
+        return $errors;
+
+    }
+
+    /**
+     * @return array
+     * TODO (WIP)
+     */
+    public static function getAllEmployees()
+    {
+        $results = DBManager::getInstance()->query("SELECT * FROM employees");
+        if($results->num_rows > 0){
+            while($row = $results->fetch_assoc()) {
+                //echo "ID: " . $row['id'] . ", Name: " . $row['first_name'] . ", Email: " . $row['email_address'] . "<br>";
+            }
+        }
+        return [];
+    }
+
     /**
      * @return array
      */
-    public function getAllEmployees()
+    public static function getEmployeeSkills()
     {
         $results = DBManager::getInstance()->query("SELECT * FROM employees");
         if($results->num_rows > 0){
