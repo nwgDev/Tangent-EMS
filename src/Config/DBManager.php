@@ -69,7 +69,6 @@ class DBManager
 
             $sql= "INSERT INTO $table ($columns) VALUES ($values)";
 
-            $this->query($sql);
             return $this->query($sql);;
         }
     }
