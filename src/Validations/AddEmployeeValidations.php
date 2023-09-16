@@ -9,18 +9,19 @@ use TANGENT\Config\DBManager;
 
 class AddEmployeeValidations
 {
-    private $obj_employee;
+    private $objEmployee;
     private $table;
     private $errors = [];
 
     public function __construct($employee, $table)
     {
-        $this->obj_employee = $employee;
+        $this->objEmployee = $employee;
         $this->table = $table;
     }
 
     public function validateEmployee()
     {
+        $this->validateID();
         $this->validateFirstName();
         $this->validateLastName();
         $this->validateEmailAddress();
@@ -32,13 +33,23 @@ class AddEmployeeValidations
         return empty($this->errors);
     }
 
+    private function validateID()
+    {
+
+        $pattern = '/^[A-Z]{2}\d{4}$/';
+        $isIDValid = preg_match($pattern, $this->objEmployee->getID());
+        if(!$isIDValid){
+            $this->errors[] = "Server error: ID is not valid";
+        }
+    }
+
     private function validateFirstName()
     {
-        if (empty($this->obj_employee->getFirstName())) {
+        if (empty($this->objEmployee->getFirstName())) {
             $this->errors[] = "First name is required.";
 
         }else{
-            if (!is_string($this->obj_employee->getFirstName())) {
+            if (!is_string($this->objEmployee->getFirstName())) {
                 $this->errors[] = "First name is not a string.";
             }
         }
@@ -46,11 +57,11 @@ class AddEmployeeValidations
 
     private function validateLastName()
     {
-        if (empty($this->obj_employee->getLastName())) {
+        if (empty($this->objEmployee->getLastName())) {
             $this->errors[] = "Last name is required.";
 
         }else{
-            if (!is_string($this->obj_employee->getLastName())) {
+            if (!is_string($this->objEmployee->getLastName())) {
                 $this->errors[] = "Last name is not a string.";
             }
         }
@@ -58,12 +69,12 @@ class AddEmployeeValidations
 
     private function validateEmailAddress()
     {
-        if (!empty($this->obj_employee->getEmail())){
-            if (!filter_var($this->obj_employee->getEmail(), FILTER_VALIDATE_EMAIL)) {
+        if (!empty($this->objEmployee->getEmail())){
+            if (!filter_var($this->objEmployee->getEmail(), FILTER_VALIDATE_EMAIL)) {
                 $this->errors[] = "Invalid email address.";
             }
 
-            if(DBManager::getInstance()->exists($this->table, ['email_address'  => $this->obj_employee->getEmail(),]))
+            if(DBManager::getInstance()->exists($this->table, ['email_address'  => $this->objEmployee->getEmail(),]))
             {
                 $this->errors[] = "Email address already exists.";
             }
@@ -74,8 +85,8 @@ class AddEmployeeValidations
 
     private function validateDateOfBirth()
     {
-        if (!empty($this->obj_employee->getDateOfBirth())) {
-            $birthDate = new DateTime($this->obj_employee->getDateOfBirth());
+        if (!empty($this->objEmployee->getDateOfBirth())) {
+            $birthDate = new DateTime($this->objEmployee->getDateOfBirth());
             $currentDate = new DateTime();
             $currentYear = date("Y");
             $birthYear = date("Y", strtotime($birthDate->format('Y-m-d H:i:s')));
@@ -97,28 +108,28 @@ class AddEmployeeValidations
 
     private function validatePostalCode()
     {
-        if (empty($this->obj_employee->getPostalCode())) {
+        if (empty($this->objEmployee->getPostalCode())) {
             $this->errors[] = "Postal code is required.";
         }
     }
 
     private function validateContactNumber()
     {
-        if (empty($this->obj_employee->getContactNumber())) {
+        if (empty($this->objEmployee->getContactNumber())) {
             $this->errors[] = "Contact number is required.";
         }
     }
 
     private function validateCity()
     {
-        if (empty($this->obj_employee->getCity())) {
+        if (empty($this->objEmployee->getCity())) {
             $this->errors[] = "City is required.";
         }
     }
 
     private function validateCountry()
     {
-        if (empty($this->obj_employee->getCountry())) {
+        if (empty($this->objEmployee->getCountry())) {
             $this->errors[] = "Country is required.";
         }
     }
