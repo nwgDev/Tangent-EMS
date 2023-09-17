@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $skills = $_POST["skills"];
 
-    $results = EmployeeManager::AddEmployee('employees', $employee);
+    $results = EmployeeManager::eddEmployee('employees', $employee);
 
     if($results && !empty($skills)) {
         if(DBManager::getInstance()->exists('employees', ['id'  => $employee->getID(),])) {
@@ -42,10 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 NOW
             );
 
-            $result_skills = EmployeeManager::AddEmployeeSkills('employee_skills', $employeeSkills);
-            var_dump($result_skills);exit();
+            $result_skills = EmployeeManager::addEmployeeSkills('employee_skills', $employeeSkills);
+            echo 'i am here';
+            //var_dump($result_skills);exit();
         }
     }
-    var_dump($results);
+    //var_dump($results);
 }
 
