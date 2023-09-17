@@ -47,6 +47,14 @@ class DBManager
     }
 
     /**
+     * @param $sql
+     * @return bool|\mysqli_result
+     */
+    public function query($sql){
+        return mysqli_query($this->_conn ,$sql);
+    }
+
+    /**
      * @param $table
      * @param $array
      * @return int|string
@@ -71,26 +79,62 @@ class DBManager
 
             return $this->query($sql);;
         }
+        return false;
     }
 
     /**
-     * @param $sql
+     * @param $table
+     * @param $arr
+     * @param $where
      * @return bool|\mysqli_result
      */
-    public function query($sql){
-        return mysqli_query($this->_conn ,$sql);
-    }
-
-    public function update($table ,$arr ,$where ,$player)
+    public function update($table ,$arr, $where)
     {
-        return null;
+        if ( is_array($arr) )
+        {
+            $data = '';
+            foreach ($arr as $column => $value) {
+                $data .= "`".$column."`='".$value."',";
+            }
+
+            $data = trim($data ,',');
+
+            $sql = "UPDATE $table SET $data WHERE $where";
+
+            return $this->query($sql);
+        }
+        return false;
     }
 
-    public function delete($table ,$arr ,$where ,$player)
+    /**
+     * @param $table
+     * @param $where
+     * @return bool|\mysqli_result
+     */
+    public function delete($table ,$where )
     {
-        return null;
+        // Disable foreign key checks to allow deletion without constraints
+        $this->query("SET FOREIGN_KEY_CHECKS=0");
+
+        $sql_response = "DELETE FROM $table WHERE $where";
+
+        if ( $this->query($sql_response) )
+        {
+            $this->query("SET FOREIGN_KEY_CHECKS=1");
+            return $this->query($sql_response);
+        }
+
+        // Enable foreign key checks
+        $this->query("SET FOREIGN_KEY_CHECKS=1");
+
+        return $this->query($sql_response);
     }
 
+    /**
+     * @param $table
+     * @param $array
+     * @return bool
+     */
     public function exists($table, $array){
         if ( is_array($array) )
         {
@@ -109,6 +153,7 @@ class DBManager
             }
             return false;
         }
+        return false;
     }
 
     /**
@@ -118,5 +163,4 @@ class DBManager
     {
         mysqli_close($this->_conn);
     }
-
 }
