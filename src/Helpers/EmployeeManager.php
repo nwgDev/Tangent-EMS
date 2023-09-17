@@ -9,37 +9,32 @@ use TANGENT\Config\DBManager;
 
 class EmployeeManager
 {
-    public static function AddEmployee($table_name, $employee)
+    /**
+     * @param $table_name
+     * @param $employee
+     * @return array|bool|int|\mysqli_result|string
+     */
+    public static function eddEmployee($table_name, $employee)
     {
-        $validation = new AddEmployeeValidations($employee, $table_name);
-        $no_errors = $validation->validateEmployee();
-        $errors = $validation->getErrors();
-
-        if ($no_errors) {
-            $arrEmployee = [
-                'id' => $employee->getID(),
-                'seniority_rating_id' => $employee->getSeniorityRating(),
-                'first_name' => $employee->getFirstName(),
-                'last_name' => $employee->getLastName(),
-                'contact_number' => $employee->getContactNumber(),
-                'email_address'  => $employee->getEmail(),
-                'date_of_birth' => $employee->getDateOfBirth(),
-                'street_address' => $employee->getStreetAddress(),
-                'city' => $employee->getCity(),
-                'postal_code' => $employee->getPostalCode(),
-                'country' => $employee->getCountry(),
-                'created_by' => $employee->getCreatedBy(),
-                'created_at' => $employee->getCreatedAt(),
+        $date = [
+            'id' => $employee->getID(),
+            'created_by' => $employee->getCreatedBy(),
+            'created_at' => $employee->getCreatedAt(),
             ];
 
-            DBManager::getInstance()->create($table_name,  $arrEmployee);
+        $results = self::employeeFields($table_name, $employee);
 
-            return true;
+        $arrEmployee = array_merge($results, $date);
+
+        $response = DBManager::getInstance()->create($table_name,  $arrEmployee);
+
+        if($response) {
+            return $response;
         }
-        return $errors;
+        return $results;
     }
 
-    public static function AddEmployeeSkills($table_name, $employeeSkills)
+    public static function addEmployeeSkills($table_name, $employeeSkills)
     {
         $validation = new AddEmployeeSkillsValidations($employeeSkills);
         $no_errors = $validation->validateEmployeeSkills();
@@ -54,6 +49,50 @@ class EmployeeManager
             ];
 
             DBManager::getInstance()->create($table_name,  $arrEmployeeSkills);
+
+            return true;
+        }
+        return $errors;
+
+    }
+
+    public static function editEmployee($table_name, $employee)
+    {
+        $date = [
+            'updated_by' => $employee->getCreatedBy(),
+            'updated_at' => $employee->getCreatedAt(),
+        ];
+
+        $results = self::employeeFields($table_name, $employee);
+
+        $arrEmployee = array_merge($results, $date);
+        $where_condition = 'id ='."'".$employee->getID()."'";
+
+        $response = DBManager::getInstance()->update($table_name,  $arrEmployee, $where_condition);
+
+        if($response) {
+            return $response;
+        }
+
+        return $results;
+    }
+
+    public static function editEmployeeSkills($table_name, $employeeSkills)
+    {
+        $validation = new AddEmployeeSkillsValidations($employeeSkills);
+        $no_errors = $validation->validateEmployeeSkills();
+        $errors = $validation->getErrors();
+
+        if ($no_errors) {
+            $arrEmployeeSkills = [
+                'skills' => $employeeSkills->getSkills(),
+                'updated_by' => $employeeSkills->getCreatedBy(),
+                'updated_at' => $employeeSkills->getCreatedAt(),
+            ];
+
+            $where_condition = 'employee_id ='."'".$employeeSkills->getEmployee()."'";
+
+            DBManager::getInstance()->update($table_name,  $arrEmployeeSkills, $where_condition);
 
             return true;
         }
@@ -97,5 +136,38 @@ class EmployeeManager
         $_table = 'employees';
         $_where = 'id ='.$employee;
         DBManager::getInstance()->update($_table, $data, $_where, $employee);
+    }
+
+    public static function deleteEmployee($table, $employee)
+    {
+        return DBManager::getInstance()->delete($table,$employee);
+    }
+
+    public static function deleteEmployeeSkills($table, $employee)
+    {
+         return DBManager::getInstance()->delete($table,$employee);
+    }
+
+    private static function employeeFields($table_name, $employee)
+    {
+        $validation = new AddEmployeeValidations($employee, $table_name);
+        $no_errors = $validation->validateEmployee();
+        $errors = $validation->getErrors();
+
+        if ($no_errors) {
+            return [
+                'seniority_rating_id' => $employee->getSeniorityRating(),
+                'first_name' => $employee->getFirstName(),
+                'last_name' => $employee->getLastName(),
+                'contact_number' => $employee->getContactNumber(),
+                'email_address'  => $employee->getEmail(),
+                'date_of_birth' => $employee->getDateOfBirth(),
+                'street_address' => $employee->getStreetAddress(),
+                'city' => $employee->getCity(),
+                'postal_code' => $employee->getPostalCode(),
+                'country' => $employee->getCountry(),
+            ];
+        }
+        return $errors;
     }
 }
