@@ -4,7 +4,6 @@
 namespace TANGENT\Validations;
 
 
-
 class AddEmployeeSkillsValidations
 {
     private $objEmployeeSkiils;
@@ -34,5 +33,4 @@ class AddEmployeeSkillsValidations
     {
         return $this->errors;
     }
-
 }

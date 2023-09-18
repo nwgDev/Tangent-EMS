@@ -148,10 +148,14 @@ class DBManager
             }
 
             $exists = $this->query("SELECT $column FROM $table WHERE $column=$value");
+
+            if(!$exists){
+                return false;
+            }
+
             if(mysqli_num_rows($exists) > 0){
                 return true;
             }
-            return false;
         }
         return false;
     }
