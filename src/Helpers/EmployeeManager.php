@@ -132,10 +132,12 @@ class EmployeeManager
     public static function getAllEmployees()
     {
         $results = DBManager::getInstance()->query("SELECT * FROM employees");
+        $response = [];
         if($results->num_rows > 0){
             while($row = $results->fetch_assoc()) {
-                //echo "ID: " . $row['id'] . ", Name: " . $row['first_name'] . ", Email: " . $row['email_address'] . "<br>";
+                $response[] = $row;
             }
+            return $response;
         }
         return [];
     }
