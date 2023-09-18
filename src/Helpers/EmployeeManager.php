@@ -48,9 +48,7 @@ class EmployeeManager
                 'created_at' => $employeeSkills->getCreatedAt(),
             ];
 
-            DBManager::getInstance()->create($table_name,  $arrEmployeeSkills);
-
-            return true;
+            return DBManager::getInstance()->create($table_name,  $arrEmployeeSkills);
         }
         return $errors;
 
@@ -92,12 +90,35 @@ class EmployeeManager
 
             $where_condition = 'employee_id ='."'".$employeeSkills->getEmployee()."'";
 
-            DBManager::getInstance()->update($table_name,  $arrEmployeeSkills, $where_condition);
-
-            return true;
+            return DBManager::getInstance()->update($table_name,  $arrEmployeeSkills, $where_condition);
         }
         return $errors;
 
+    }
+
+    public static function updatedSkills($table_name, $employeeSkills, $employee)
+    {
+        $existingSkills = [];
+        $updatedSkills = [];
+        $newSkillsUpper = array_map('strtoupper', $employeeSkills);
+
+        $result = DBManager::getInstance()->query(
+            "SELECT skills FROM $table_name where employee_id = ". "'". $employee."'");
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $existingSkills = json_decode(strtoupper($row['skills']), true);
+        }
+
+        foreach ($newSkillsUpper as $newSkill) {
+            if (!in_array($newSkill, $existingSkills)) {
+                $existingSkills[] = $newSkill;
+
+                $updatedSkills = json_encode($existingSkills);
+            }
+        }
+
+        return $updatedSkills;
     }
 
     /**
