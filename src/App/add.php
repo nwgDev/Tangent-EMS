@@ -14,7 +14,7 @@ use TANGENT\Helpers\EmployeeManager;
 
 function saveEmployee($employee, $skills)
 {
-    $results = EmployeeManager::eddEmployee('employees', $employee);
+    $results = EmployeeManager::addEmployee('employees', $employee);
 
     if($results && !empty($skills)) {
         if(DBManager::getInstance()->exists('employees', ['id'  => $employee->getID(),])) {

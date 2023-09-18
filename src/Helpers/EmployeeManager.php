@@ -14,7 +14,7 @@ class EmployeeManager
      * @param $employee
      * @return array|bool|int|\mysqli_result|string
      */
-    public static function eddEmployee($table_name, $employee)
+    public static function addEmployee($table_name, $employee)
     {
         $date = [
             'id' => $employee->getID(),
@@ -173,6 +173,25 @@ class EmployeeManager
     public static function deleteEmployeeSkills($table, $employee)
     {
          return DBManager::getInstance()->delete($table,$employee);
+    }
+
+    public static function searchEmployee($searchTerm)
+    {
+        $sql = "SELECT * FROM employees WHERE 
+        first_name LIKE '%$searchTerm%' OR 
+        last_name LIKE '%$searchTerm%' OR 
+        email_address  LIKE '%$searchTerm%'";
+
+        $results = DBManager::getInstance()->query($sql);
+
+        $response = [];
+        if($results->num_rows > 0){
+            while($row = $results->fetch_assoc()) {
+                $response[] = $row;
+            }
+            return $response;
+        }
+        return [];
     }
 
     private static function employeeFields($table_name, $employee)
