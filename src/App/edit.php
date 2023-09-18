@@ -12,6 +12,28 @@ use TANGENT\App\EmployeeSkills;
 use TANGENT\Config\DBManager;
 use TANGENT\Helpers\EmployeeManager;
 
+function updateEmployee($employee, $newSkills)
+{
+    $results = EmployeeManager::editEmployee('employees', $employee);
+
+    if($results === true && !empty($newSkills)) {
+        if(DBManager::getInstance()->exists('employees', ['id'  => $employee->getID(),])) {
+
+            $updatedSkills = EmployeeManager::updatedSkills('employee_skills', $newSkills, $employee->getID());
+
+            $employeeSkills = new EmployeeSkills (
+                $employee->getID(),
+                $updatedSkills,
+                ADMIN,
+                NOW
+            );
+
+            EmployeeManager::editEmployeeSkills('employee_skills', $employeeSkills);
+        }
+    }
+    return $results;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employee = new Employee(
         $_POST["id"],
@@ -30,24 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     $newSkills = $_POST["skills"];
-    $updatedSkills = [];
 
-    $results = EmployeeManager::editEmployee('employees', $employee);
+    $results = updateEmployee($employee, $newSkills);
 
-    if($results === true && !empty($newSkills)) {
-        if(DBManager::getInstance()->exists('employees', ['id'  => $employee->getID(),])) {
-
-            $updatedSkills = EmployeeManager::updatedSkills('employee_skills', $newSkills, $employee->getID());
-
-            $employeeSkills = new EmployeeSkills (
-                $employee->getID(),
-                $updatedSkills,
-                ADMIN,
-                NOW
-            );
-
-            $result_skills = EmployeeManager::editEmployeeSkills('employee_skills', $employeeSkills);
-        }
+    if ($results === true) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => 'Employee successfully updated']);
+    } else {
+        header('Content-Type: application/json');
+        echo json_encode(['errors:' => $results]);
     }
-    var_dump($results);
 }

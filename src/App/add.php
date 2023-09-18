@@ -12,6 +12,25 @@ use TANGENT\App\EmployeeSkills;
 use TANGENT\Config\DBManager;
 use TANGENT\Helpers\EmployeeManager;
 
+function saveEmployee($employee, $skills)
+{
+    $results = EmployeeManager::eddEmployee('employees', $employee);
+
+    if($results && !empty($skills)) {
+        if(DBManager::getInstance()->exists('employees', ['id'  => $employee->getID(),])) {
+            $employeeSkills = new EmployeeSkills (
+                $employee->getID(),
+                json_encode($skills),
+                ADMIN,
+                NOW
+            );
+
+            EmployeeManager::addEmployeeSkills('employee_skills', $employeeSkills);
+        }
+    }
+    return $results;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $employee = new Employee(EMPLOYEE_ID,
@@ -31,22 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $skills = $_POST["skills"];
 
-    $results = EmployeeManager::eddEmployee('employees', $employee);
+    $results = saveEmployee($employee, $skills);
 
-    if($results && !empty($skills)) {
-        if(DBManager::getInstance()->exists('employees', ['id'  => $employee->getID(),])) {
-            $employeeSkills = new EmployeeSkills (
-                $employee->getID(),
-                json_encode($skills),
-                ADMIN,
-                NOW
-            );
-
-            $result_skills = EmployeeManager::addEmployeeSkills('employee_skills', $employeeSkills);
-            echo 'i am here';
-            //var_dump($result_skills);exit();
-        }
+    if ($results === true) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => 'Employee successfully saved']);
+    } else {
+        header('Content-Type: application/json');
+        echo json_encode(['errors:' => $results]);
     }
-    //var_dump($results);
 }
 
