@@ -118,6 +118,10 @@ class EmployeeManager
             }
         }
 
+        if (empty($updatedSkills)) {
+            return $existingSkills;
+        }
+
         return $updatedSkills;
     }
 
