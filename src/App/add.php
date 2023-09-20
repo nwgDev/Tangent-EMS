@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include_once '../Helpers/EmployeeManager.php';
 include_once '../Config/config.php';
 include_once '../Config/DBManager.php';
@@ -52,12 +54,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $results = saveEmployee($employee, $skills);
 
-    if ($results === true) {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => 'Employee successfully saved']);
-    } else {
-        header('Content-Type: application/json');
-        echo json_encode(['errors:' => $results]);
+    if ($results === true)
+    {
+        $_SESSION['message'] = "Employee Created Successfully";
+        header('Location: ../resources/templates/add.php');
+        exit(0);
+    }
+    else
+    {
+        $_SESSION['message'] = json_encode(['errors:' => $results]);
+        header('Location: ../resources/templates/add.php');
+        exit(0);
     }
 }
 
