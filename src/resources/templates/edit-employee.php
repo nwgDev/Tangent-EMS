@@ -80,39 +80,40 @@ if(isset($_GET['id']))
                     <label>Skills</label>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="skills">Skill</label>
-                            <div id="skills-container">
-                                <input type="text" name="skills[]" class="form-control">
-                                <button type="button" onclick="addSkillField()">Add Skill</button>
-                            </div><br><br>
+                <div id="skillRows">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="skills">Skill</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Yrs Exp</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Seniority Rating</label>
+
+                        </div>
+                        <div class="col-md-2">
                         </div>
                     </div>
 
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Yrs Exp</label>
-                            <input type="text" name="year_exp" class="form-control">
-                        </div>
-                    </div>
+                </div>
 
-                    <div class="col-md-3">
-                        <label>Seniority Rating</label>
-                        <input type="text" name="seniority_rating_id" class="form-control">
-                    </div>
+                <br>
+                <div class="col-md-3">
+                    <button type="button" onclick="addRow()" class="btn btn-secondary btn-sm  form-control" >Add New Skill</button>
                 </div>
 
                 <div class="mb-3">
-                    <button type="submit" name="save_employee" class="btn btn-primary">Save changes to Employee</button>
+                    <button type="submit" name="save_employee" class="btn btn-primary float-sm-end">Save changes to Employee</button>
                 </div>
 
             </form>
             <?php
-        }
-        else
-        {
-            echo "<h4>No Such Id Found</h4>";
         }
     }
