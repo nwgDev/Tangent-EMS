@@ -127,7 +127,22 @@ class EmployeeManager
 
     /**
      * @return array
-     * TODO (WIP)
+     */
+    public static function getSeniorityRatings()
+    {
+        $results = DBManager::getInstance()->query("SELECT * FROM seniority_ratings");
+        $response = [];
+        if($results->num_rows > 0){
+            while($row = $results->fetch_assoc()) {
+                $response[] = $row;
+            }
+            return $response;
+        }
+        return [];
+    }
+
+    /**
+     * @return array
      */
     public static function getAllEmployees()
     {
@@ -208,6 +223,7 @@ class EmployeeManager
         if ($no_errors) {
             return [
                 'seniority_rating_id' => $employee->getSeniorityRating(),
+                'year_exp' => $employee->getYearExp(),
                 'first_name' => $employee->getFirstName(),
                 'last_name' => $employee->getLastName(),
                 'contact_number' => $employee->getContactNumber(),
