@@ -21,13 +21,47 @@
                     ?>
 
                     <script>
-                        function addSkillField() {
-                            var container = document.getElementById("skills-container");
-                            var input = document.createElement("input");
-                            input.type = "text";
-                            input.name = "skills[]";
-                            input.required = true;
-                            container.appendChild(input);
+                        let rowCounter = 1; // Used to assign unique IDs to each row
+
+                        function addRow() {
+                            const skillRows = document.getElementById('skillRows');
+
+                            const rowDiv = document.createElement('div');
+                            rowDiv.classList.add('row-container');
+                            rowDiv.id = `row${rowCounter}`;
+
+                            rowDiv.innerHTML = `
+                            <div class="row">
+                              <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input type="text" name="skills[]" class="form-control">
+                                    </div>
+                               </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="text" name="year_exp[]" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <?php
+                            include ('../../App/seniority-ratings.php');
+                            ?>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" "removeRow('row${rowCounter}')" class="btn btn-danger btn-sm form-control float-end" >Remove</button>
+                            </div>
+                            </div><br>
+                            `;
+
+                            skillRows.appendChild(rowDiv);
+                            rowCounter++;
+                        }
+
+                        function removeRow(rowId) {
+                            const rowToRemove = document.getElementById(rowId);
+                            rowToRemove.remove();
                         }
                     </script>
                 </div>
