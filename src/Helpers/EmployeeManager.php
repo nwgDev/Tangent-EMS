@@ -37,7 +37,7 @@ class EmployeeManager
     public static function addEmployeeSkills($table_name, $employeeSkills)
     {
         $validation = new AddEmployeeSkillsValidations($employeeSkills);
-        $no_errors = $validation->validateEmployeeSkills();
+        $no_errors = $validation->validateEmployeeSkills(false);
         $errors = $validation->getErrors();
 
         if ($no_errors) {
@@ -154,15 +154,20 @@ class EmployeeManager
         return [];
     }
 
-    /**
-     * @param $data
-     * @param $employee
-     */
-    public function updateEmployee($data, $employee)
+    public static function getEmployee($employee)
     {
-        $_table = 'employees';
-        $_where = 'id ='.$employee;
-        DBManager::getInstance()->update($_table, $data, $_where, $employee);
+        $sql = "SELECT * FROM employees WHERE id = ". "'". $employee."'";
+
+        $results = DBManager::getInstance()->query($sql);
+
+        $response = [];
+        if($results->num_rows > 0){
+            while($row = $results->fetch_assoc()) {
+                $response[] = $row;
+            }
+            return $response;
+        }
+        return [];
     }
 
     public static function deleteEmployee($table, $employee)
@@ -197,7 +202,7 @@ class EmployeeManager
     private static function employeeFields($table_name, $employee)
     {
         $validation = new AddEmployeeValidations($employee, $table_name);
-        $no_errors = $validation->validateEmployee();
+        $no_errors = $validation->validateEmployee(true);
         $errors = $validation->getErrors();
 
         if ($no_errors) {
