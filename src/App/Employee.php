@@ -8,6 +8,7 @@ class Employee
 {
     private $id;
     private $seniority_rating_id;
+    private $year_exp;
     private $first_name;
     private $last_name;
     private $contact_number;
@@ -22,11 +23,12 @@ class Employee
     private $updated_at;
     private $updated_by;
 
-    public function __construct($id, $seniority_rating_id, $first_name, $last_name, $contact_number,
+    public function __construct($id, $seniority_rating_id,$year_exp, $first_name, $last_name, $contact_number,
                                 $email_address, $date_of_birth, $street_address,$city, $postal_code,
                                 $country, $created_by, $created_at){
         $this->id = $id;
         $this->seniority_rating_id = $seniority_rating_id;
+        $this->year_exp = $year_exp;
         $this->first_name = ucwords($first_name);
         $this->last_name = ucwords($last_name);
         $this->contact_number = $contact_number;
@@ -43,6 +45,11 @@ class Employee
     public function getID()
     {
         return $this->id;
+    }
+
+    public function getYearExp()
+    {
+        return $this->year_exp;
     }
 
     public function getFirstName()
@@ -153,6 +160,11 @@ class Employee
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    public function setYearExp($year_exp)
+    {
+        $this->year_exp = $year_exp;
     }
 
     public function setPostalCode($postal_code)
