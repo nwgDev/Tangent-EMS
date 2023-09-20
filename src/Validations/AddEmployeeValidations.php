@@ -19,12 +19,12 @@ class AddEmployeeValidations
         $this->table = $table;
     }
 
-    public function validateEmployee()
+    public function validateEmployee($bool)
     {
         $this->validateID();
         $this->validateFirstName();
         $this->validateLastName();
-        $this->validateEmailAddress();
+        $this->validateEmailAddress($bool);
         $this->validateDateOfBirth();
         $this->validateContactNumber();
         $this->validatePostalCode();
@@ -67,16 +67,19 @@ class AddEmployeeValidations
         }
     }
 
-    private function validateEmailAddress()
+    private function validateEmailAddress($update_employee = false)
     {
         if (!empty($this->objEmployee->getEmail())){
             if (!filter_var($this->objEmployee->getEmail(), FILTER_VALIDATE_EMAIL)) {
                 $this->errors[] = "Invalid email address.";
             }
 
-            if(DBManager::getInstance()->exists($this->table, ['email_address'  => $this->objEmployee->getEmail(),]))
+            if (!$update_employee)
             {
-                $this->errors[] = "Email address already exists.";
+                if(DBManager::getInstance()->exists($this->table, ['email_address'  => $this->objEmployee->getEmail(),]))
+                {
+                    $this->errors[] = "Email address already exists.";
+                }
             }
         }else {
             $this->errors[] = "Email address is required.";
