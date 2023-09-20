@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include_once '../Helpers/EmployeeManager.php';
 include_once '../Config/config.php';
 include_once '../Config/DBManager.php';
@@ -56,10 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $results = updateEmployee($employee, $newSkills);
 
     if ($results === true) {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => 'Employee successfully updated']);
-    } else {
-        header('Content-Type: application/json');
-        echo json_encode(['errors:' => $results]);
+        $_SESSION['message'] = "Employee Updated Successfully";
+        header('Location: ../resources/templates/index.php');
+        exit(0);
+    }
+    else {
+        $_SESSION['message'] = json_encode(['errors:' => $results]);
+        header('Location: ../resources/templates/index.php');
+        exit(0);
     }
 }
