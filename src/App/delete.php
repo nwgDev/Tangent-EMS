@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 use TANGENT\Config\DBManager;
 use TANGENT\Helpers\EmployeeManager;
@@ -24,22 +25,24 @@ function removeEmployee($id)
     return $exist;
 }
 
-if (isset($_POST['id']) && !empty($_POST['id'])) {
-    $id = $_POST['id'];
+if(isset($_POST['delete_employee']))
+{
+    $response  = removeEmployee($_POST['delete_employee']);
 
-    $response  = removeEmployee($id);
-
-    if ($response === true) {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => 'Employee successfully deleted']);
-        exit();
-    } else {
-        header('Content-Type: application/json');
-        echo json_encode(['errors:' => 'Employee does not exists!']);
-        exit();
+    if($response === true)
+    {
+        $_SESSION['message'] = "Employee Deleted Successfully";
+        header("Location: ../resources/templates/index.php");
+        exit(0);
+    }
+    else
+    {
+        $_SESSION['message'] = "Employee Not Deleted";
+        header("Location: ../resources/templates/index.php");
+        exit(0);
     }
 }
 
-header('Content-Type: application/json');
-echo json_encode(['errors:' => 'Employee id is not provided!']);
-exit();
+$_SESSION['message'] = "Employee ID Not provided";
+header("Location: ../resources/templates/index.php");
+exit(0);
