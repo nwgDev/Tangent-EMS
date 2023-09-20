@@ -39,7 +39,8 @@ function updateEmployee($employee, $newSkills)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employee = new Employee(
         $_POST["id"],
-        $_POST["seniority_rating_id"],
+        json_encode($_POST["seniority_rating_id"]),
+        json_encode($_POST["year_exp"]),
         $_POST["first_name"],
         $_POST["last_name"],
         $_POST["contact_number"],
