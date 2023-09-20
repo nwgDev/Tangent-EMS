@@ -2,3 +2,13 @@
 2023-09-20 12:35:45 - Employee Created Successfully by adminWN1234
 2023-09-20 12:38:10 - Employee Created Successfully by adminWN1234
 2023-09-20 12:56:48 - Employee Deleted Successfully by admin WN1234
+2023-09-20 14:04:58 - Employee Created Successfully by admin WN1234
+2023-09-20 14:09:22 - Employee Created Successfully by admin WN1234
+2023-09-20 14:10:31 - Employee Created Successfully by admin WN1234
+2023-09-20 14:10:34 - Failed to creat employee
+2023-09-20 14:14:18 - Failed to creat employee
+2023-09-20 14:16:12 - Failed to creat employee
+2023-09-20 14:17:34 - Failed to creat employee
+2023-09-20 14:18:36 - Failed to creat employee
+2023-09-20 14:19:54 - Failed to creat employee
+2023-09-20 14:30:00 - Failed to creat employee

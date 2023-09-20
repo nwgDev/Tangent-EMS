@@ -12,7 +12,9 @@ class AddEmployeeTest extends TestCase
     public function testEmptyFields()
     {
         $post = [
+            'id' => '',
             "seniority_rating_id" => "",
+            "year_exp" =>"",
             "first_name" => "",
             "last_name" => "",
             "contact_number" => "",
@@ -21,18 +23,31 @@ class AddEmployeeTest extends TestCase
             "street_address" => "",
             "city" => "",
             "postal_code" => "",
-            "country" => ""
+            "country" => "",
+            "created_by" => "",
+            "created_at" => ""
         ];
 
         $employee = $this->createObject($post);
 
-        $this->assertNull($employee);
+        $this->assertEmpty($employee->getFirstName());
+        $this->assertEmpty($employee->getCity());
+        $this->assertEmpty($employee->getContactNumber());
+        $this->assertEmpty($employee->getCountry());
+        $this->assertEmpty($employee->getCreatedAt());
+        $this->assertEmpty($employee->getCreatedBy());
+        $this->assertEmpty($employee->getDateOfBirth());
+        $this->assertEmpty($employee->getEmail());
+        $this->assertEmpty($employee->getPostalCode());
+        $this->assertEmpty($employee->getYearExp());
     }
 
     public function testEmployeeCreation()
     {
         $post = [
-            "seniority_rating_id" => 2,
+            "id" => "NW1236",
+            "seniority_rating_id" => ['2'],
+            "year_exp" => ['2'],
             "first_name" => "nana",
             "last_name" => "nkwi",
             "contact_number" => "0121111111",
@@ -48,16 +63,22 @@ class AddEmployeeTest extends TestCase
 
         $this->assertInstanceOf(Employee::class, $employee);
 
-        $this->assertEquals(EMPLOYEE_ID, $employee->getId());
+        $this->assertEquals($post["id"], $employee->getId());
         $this->assertEquals($post["seniority_rating_id"], $employee->getSeniorityRating());
-        $this->assertEquals($post["first_name"], $employee->getFirstName());
+        $this->assertEquals(ucwords($post["first_name"]), $employee->getFirstName());
+        $this->assertEquals(ucwords($post["last_name"]), $employee->getLastName());
+        $this->assertEquals(($post["postal_code"]), $employee->getPostalCode());
+        $this->assertEquals(($post["email_address"]), $employee->getEmail());
+        $this->assertEquals(ucwords($post["city"]), $employee->getCity());
+        $this->assertEquals(ucwords($post["country"]), $employee->getCountry());
     }
 
     private function createObject($post)
     {
         return new Employee(
-            '',
+            $post["id"],
             $post["seniority_rating_id"],
+            $post["year_exp"],
             $post["first_name"],
             $post["last_name"],
             $post["contact_number"],

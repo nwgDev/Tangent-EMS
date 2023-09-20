@@ -12,18 +12,15 @@ class DBManager
     private $_host = DB_HOST;
     private $_conn;
 
-    // prevent external code to create new instance
     private function __construct(){
         $this->createConnection();
     }
 
-    // Prevent users from copying object instances
     public function __clone()
     {
         trigger_error('Clone is not allowed.',E_USER_ERROR);
     }
 
-    //create db connection
     private function createConnection()
     {
         $this->_conn = mysqli_connect(
@@ -36,9 +33,6 @@ class DBManager
         mysqli_set_charset($this->_conn,'utf-8');
     }
 
-    /**
-     * @return DBManager|null
-     */
     public static function getInstance() {
         if (!self::$_instance instanceof self) {
             self::$_instance = new self;
@@ -46,19 +40,10 @@ class DBManager
         return self::$_instance;
     }
 
-    /**
-     * @param $sql
-     * @return bool|\mysqli_result
-     */
     public function query($sql){
         return mysqli_query($this->_conn ,$sql);
     }
 
-    /**
-     * @param $table
-     * @param $array
-     * @return int|string
-     */
     public function create($table ,$array)
     {
         if ( is_array($array) )
@@ -82,12 +67,6 @@ class DBManager
         return false;
     }
 
-    /**
-     * @param $table
-     * @param $arr
-     * @param $where
-     * @return bool|\mysqli_result
-     */
     public function update($table ,$arr, $where)
     {
         if ( is_array($arr) )
@@ -106,11 +85,6 @@ class DBManager
         return false;
     }
 
-    /**
-     * @param $table
-     * @param $where
-     * @return bool|\mysqli_result
-     */
     public function delete($table ,$where )
     {
         // Disable foreign key checks to allow deletion without constraints
@@ -130,11 +104,6 @@ class DBManager
         return $this->query($sql_response);
     }
 
-    /**
-     * @param $table
-     * @param $array
-     * @return bool
-     */
     public function exists($table, $array){
         if ( is_array($array) )
         {
@@ -160,9 +129,6 @@ class DBManager
         return false;
     }
 
-    /**
-     * close the connection
-     */
     function __destruct ()
     {
         mysqli_close($this->_conn);

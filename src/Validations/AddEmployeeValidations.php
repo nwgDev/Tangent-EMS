@@ -101,7 +101,7 @@ class AddEmployeeValidations
                 $age = $currentDate->diff($birthDate);
 
                 if ($age->y < 18) {
-                    $this->errors[] = "Employee should be 18 years or older.";
+                    $this->errors[] = "Employee must be 18 years or older.";
                 }
             }
         }else {

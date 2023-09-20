@@ -22,7 +22,7 @@ class EmployeeManager
             'created_at' => $employee->getCreatedAt(),
             ];
 
-        $results = self::employeeFields($table_name, $employee);
+        $results = self::employeeFields($table_name, $employee, false);
 
         $arrEmployee = array_merge($results, $date);
 
@@ -37,7 +37,7 @@ class EmployeeManager
     public static function addEmployeeSkills($table_name, $employeeSkills)
     {
         $validation = new AddEmployeeSkillsValidations($employeeSkills);
-        $no_errors = $validation->validateEmployeeSkills(false);
+        $no_errors = $validation->validateEmployeeSkills();
         $errors = $validation->getErrors();
 
         if ($no_errors) {
@@ -61,7 +61,7 @@ class EmployeeManager
             'updated_at' => $employee->getCreatedAt(),
         ];
 
-        $results = self::employeeFields($table_name, $employee);
+        $results = self::employeeFields($table_name, $employee, true);
 
         $arrEmployee = array_merge($results, $date);
         $where_condition = 'id ='."'".$employee->getID()."'";
@@ -214,10 +214,10 @@ class EmployeeManager
         return [];
     }
 
-    private static function employeeFields($table_name, $employee)
+    private static function employeeFields($table_name, $employee, $bool)
     {
         $validation = new AddEmployeeValidations($employee, $table_name);
-        $no_errors = $validation->validateEmployee(true);
+        $no_errors = $validation->validateEmployee($bool);
         $errors = $validation->getErrors();
 
         if ($no_errors) {
